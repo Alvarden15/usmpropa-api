@@ -1,6 +1,5 @@
 package com.usmpropa.usmpropaapi.Results;
 
-import com.usmpropa.usmpropaapi.Models.TipoRopa;
 
 public class RopaResult
 {
