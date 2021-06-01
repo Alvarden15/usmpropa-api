@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +24,7 @@ public class TipoRopa
     @Column(nullable = false)
     private String nombre;
     
-    @OneToMany(mappedBy = "tipoRopa", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tipoRopa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Ropa> ropas = new ArrayList<>();
 
     public int getId() {
@@ -45,5 +46,12 @@ public class TipoRopa
     public TipoRopa(){
         
     }
+
+    public TipoRopa(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
+    
     
 }

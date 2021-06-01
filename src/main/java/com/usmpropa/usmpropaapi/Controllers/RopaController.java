@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,8 @@ public class RopaController
         
         Optional<Ropa> ropaEspecifica = ropaRepository.findById(id);
 
-        if(ropaEspecifica.isPresent()){
+        if(ropaEspecifica.isPresent())
+        {
             return new ResponseEntity<Ropa>(ropaEspecifica.get(), HttpStatus.OK);
         }else{
             return new ResponseEntity<Ropa>(HttpStatus.NOT_FOUND);
@@ -61,5 +63,17 @@ public class RopaController
         
     }
 
+    @GetMapping("dashboard")
+    public ResponseEntity<Map<Integer,Integer>> Dashboard()
+    {
+        List<Ropa> ropas = ropaRepository.findAll();
+        
+        Map<Integer,Integer> dashResult = ropas.stream()
+                    .collect(
+                        Collectors.groupingBy(Ropa:: getTipoRopaId,Collectors.summingInt(Ropa::getStock))
+                        );
+        
+        return new ResponseEntity<Map<Integer,Integer>>(dashResult,HttpStatus.OK);
+    }
 
 }

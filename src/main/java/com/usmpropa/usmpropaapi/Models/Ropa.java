@@ -2,6 +2,7 @@ package com.usmpropa.usmpropaapi.Models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class Ropa
 
     private double puntuacion;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tiporopa_id")
     private TipoRopa tipoRopa;
 
