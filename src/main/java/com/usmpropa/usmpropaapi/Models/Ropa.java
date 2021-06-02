@@ -31,7 +31,7 @@ public class Ropa
 
     private double puntuacion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "tiporopa_id")
     private TipoRopa tipoRopa;
 

@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tiporopa")
@@ -24,7 +25,7 @@ public class TipoRopa
     @Column(nullable = false)
     private String nombre;
     
-    @OneToMany(mappedBy = "tipoRopa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tipoRopa", cascade = CascadeType.ALL)
     private List<Ropa> ropas = new ArrayList<>();
 
     public int getId() {
@@ -46,12 +47,12 @@ public class TipoRopa
     public TipoRopa(){
         
     }
-
-    public TipoRopa(int id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
-    }
-
     
+    @Override
+    @Transient
+    public String toString()
+    {
+        return nombre;
+    }
     
 }

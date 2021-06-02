@@ -64,16 +64,16 @@ public class RopaController
     }
 
     @GetMapping("dashboard")
-    public ResponseEntity<Map<Integer,Integer>> Dashboard()
+    public ResponseEntity<Map<TipoRopa,Integer>> Dashboard()
     {
         List<Ropa> ropas = ropaRepository.findAll();
         
-        Map<Integer,Integer> dashResult = ropas.stream()
+        Map<TipoRopa,Integer> dashResult = ropas.stream()
                     .collect(
-                        Collectors.groupingBy(Ropa:: getTipoRopaId,Collectors.summingInt(Ropa::getStock))
+                        Collectors.groupingBy(Ropa:: getTipoRopa,Collectors.summingInt(Ropa::getStock))
                         );
         
-        return new ResponseEntity<Map<Integer,Integer>>(dashResult,HttpStatus.OK);
+        return new ResponseEntity<Map<TipoRopa,Integer>>(dashResult,HttpStatus.OK);
     }
 
 }
