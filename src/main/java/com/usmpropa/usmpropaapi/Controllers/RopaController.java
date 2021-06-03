@@ -1,5 +1,6 @@
 package com.usmpropa.usmpropaapi.Controllers;
 
+import com.usmpropa.usmpropaapi.Repository.BoletaRepository;
 import com.usmpropa.usmpropaapi.Repository.RopaRepository;
 import com.usmpropa.usmpropaapi.Results.RopaResult;
 
@@ -24,6 +25,7 @@ public class RopaController
 {
     @Autowired
     private RopaRepository ropaRepository;
+    private BoletaRepository boletaRepository;
     
     @GetMapping("simple")
     public ResponseEntity<List<RopaResult>> ListadoRopa()
@@ -42,6 +44,18 @@ public class RopaController
         List<Ropa> result = ropaRepository.findAll();
         
         return new ResponseEntity<List<Ropa>>(result,HttpStatus.OK);
+    }
+
+    @GetMapping("boleta")
+    public ResponseEntity<List<Boleta>> ListadoBoleta()
+    {
+        List<Boleta> boletas = boletaRepository.findAll();
+        List<Boleta> result = boletas.stream()
+            .map(r -> new Boleta(r.getId(),r.getDni(),r.getNombre(),r.getDescripcion(),r.getImporte(),r.getCantidad(),r.getTotal(),r.getFechatransaccion(),r.getDireccion(),r.getCelular()))
+            .collect(Collectors.toList());
+        
+        return new ResponseEntity<List<Boleta>>(result,HttpStatus.OK);
+        
     }
 
     @GetMapping("{id}")
