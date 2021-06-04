@@ -39,7 +39,7 @@ public class Boleta {
     
     @ManyToOne
     @JoinColumn(name = "ropa_id")
-    private Ropa ropa;
+    private Ropa ropA;
 
     @Column(name = "ropa_id", insertable = false, updatable = false)
     private int ropaId;
@@ -124,17 +124,34 @@ public class Boleta {
         this.celular = celular;
     }
 
-    public Boleta(int id, int dni, String nombre, String descripcion, double importe, double cantidad, double total, Date fechatransaccion, String direccion, String celular) {
-        this.id = id;
-        this.dni = dni;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.importe = importe;
-        this.cantidad = cantidad;
-        this.total = total;
-        this.fechatransaccion = fechatransaccion;
-        this.direccion = direccion;
-        this.celular = celular;
+    public Ropa getRopA() {
+        return ropA;
+    }
+
+    public void setRopA(Ropa ropA) {
+        this.ropA = ropA;
+    }
+
+    public int getRopaId() {
+        return ropaId;
+    }
+
+    public void setRopaId(int ropaId) {
+        this.ropaId = ropaId;
+    }
+
+    public Boleta(int id, int dni, String nombre, String descripcion, double importe, double cantidad, double total, Date fechatransaccion, String direccion, String celular,Ropa ropA) {
+        this.id = id;//
+        this.dni = dni;//
+        this.nombre = nombre;//
+        this.descripcion = descripcion;//
+        this.importe = importe;//
+        this.cantidad = cantidad;//
+        this.total = total;//
+        this.fechatransaccion = fechatransaccion;//
+        this.direccion = direccion;//
+        this.celular = celular;//
+        this.ropA=ropA;/**/
     }
    
     public Boleta(){

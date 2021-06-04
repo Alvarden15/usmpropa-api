@@ -25,6 +25,8 @@ public class RopaController
 {
     @Autowired
     private RopaRepository ropaRepository;
+
+    @Autowired
     private BoletaRepository boletaRepository;
     
     @GetMapping("simple")
@@ -49,11 +51,8 @@ public class RopaController
     @GetMapping("boleta")
     public ResponseEntity<List<Boleta>> ListadoBoleta()
     {
-        List<Boleta> boletas = boletaRepository.findAll();
-        List<Boleta> result = boletas.stream()
-            .map(r -> new Boleta(r.getId(),r.getDni(),r.getNombre(),r.getDescripcion(),r.getImporte(),r.getCantidad(),r.getTotal(),r.getFechatransaccion(),r.getDireccion(),r.getCelular()))
-            .collect(Collectors.toList());
-        
+        List<Boleta> result = boletaRepository.findAll();
+
         return new ResponseEntity<List<Boleta>>(result,HttpStatus.OK);
         
     }

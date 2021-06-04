@@ -43,7 +43,7 @@ public class Ropa
     @Column(name = "tiporopa_id", insertable = false, updatable = false)
     private int tipoRopaId;
 
-    @OneToMany(mappedBy = "ropaId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ropA", cascade = CascadeType.ALL)
     private List<Boleta> boletas = new ArrayList<>();
    
     
@@ -54,6 +54,7 @@ public class Ropa
     public void setTipoRopaId(int tipoRopaId) {
         this.tipoRopaId = tipoRopaId;
     }
+
 
     public String getDescripcion() {
         return descripcion;
