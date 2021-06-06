@@ -5,17 +5,23 @@ import com.usmpropa.usmpropaapi.Repository.RopaRepository;
 import com.usmpropa.usmpropaapi.Results.RopaResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.websocket.server.PathParam;
 
 import com.usmpropa.usmpropaapi.Models.*;
 
@@ -89,4 +95,40 @@ public class RopaController
         return new ResponseEntity<Map<TipoRopa,Integer>>(dashResult,HttpStatus.OK);
     }
 
+    @GetMapping("dashboard/tipos")
+    public ResponseEntity<Map<String,Double>> DashboardBoletaPorTipo()
+    {
+        List<Boleta> boletas = boletaRepository.findAll();
+        Map<String,Double> dashResult = boletas.stream()
+                    .collect(
+                        Collectors.groupingBy(Boleta:: getNombreTipoRopa,Collectors.summingDouble(Boleta::getTotal))
+                        );
+
+        return new ResponseEntity<Map<String,Double>>(dashResult,HttpStatus.OK);
+    }
+
+    //necesita aun algunos cambios y que se ordene por fechas
+    @GetMapping("dashboard/fechas")
+    public ResponseEntity<Map<String,Double>> DashboardBoletaPorFecha
+            (@RequestParam("fechaInicial") @DateTimeFormat(pattern =  "YYYY-dd-MM") Date fechaInicial,
+             @RequestParam("fechaFinal") @DateTimeFormat(pattern =  "YYYY-dd-MM") Date fechaFinal)
+    {
+        if(fechaFinal == null || fechaInicial == null)
+        {
+            return new ResponseEntity<Map<String,Double>>(HttpStatus.BAD_REQUEST);
+        }
+        
+        if(fechaInicial.after(fechaFinal))
+        {
+            return new ResponseEntity<Map<String,Double>>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Boleta> boletas = boletaRepository.findAll();
+        Map<String,Double> dashResult = boletas.stream()
+                    .collect(
+                        Collectors.groupingBy(Boleta:: getNombreTipoRopa,Collectors.summingDouble(Boleta::getTotal))
+                        );
+
+        return new ResponseEntity<Map<String,Double>>(dashResult,HttpStatus.OK);
+    }
 }

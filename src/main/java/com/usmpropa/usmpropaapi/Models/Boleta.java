@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "boleta")
@@ -159,4 +160,10 @@ public class Boleta {
     }
 
 
+    @Transient
+    public String getNombreTipoRopa()
+    {
+        return ropA.getTipoRopa().getNombre();
+    }
+    
 }
