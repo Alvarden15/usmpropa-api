@@ -15,6 +15,6 @@ public interface BoletaRepository extends JpaRepository<Boleta,Double>
 {
     
     @Query("select direccion as dash_direccion,sum(total) as dash_total from Boleta group by direccion")
-    List<Map<String, Object>> queryByMarca();
+    List<Map<String, Object>> queryByDireccion();
     
 }
