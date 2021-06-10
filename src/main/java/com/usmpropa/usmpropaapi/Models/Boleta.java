@@ -1,5 +1,6 @@
 package com.usmpropa.usmpropaapi.Models;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -37,6 +38,12 @@ public class Boleta {
     private String direccion;
 
     private String celular;
+
+    private BigDecimal dash_total;
+    
+    private String dash_direccion;
+
+
     
     @ManyToOne
     @JoinColumn(name = "ropa_id")

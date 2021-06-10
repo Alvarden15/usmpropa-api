@@ -131,4 +131,11 @@ public class RopaController
 
         return new ResponseEntity<Map<String,Double>>(dashResult,HttpStatus.OK);
     }
+
+    @GetMapping("dashboard/marcas")
+    public ResponseEntity<List<Map<String, Object>>> marcas(){
+        return  new ResponseEntity<List<Map<String, Object>>>(
+            boletaRepository.queryByMarca(), HttpStatus.OK);
+    }
+
 }
