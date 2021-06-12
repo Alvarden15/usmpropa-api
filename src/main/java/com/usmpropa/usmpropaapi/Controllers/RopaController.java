@@ -112,19 +112,21 @@ public class RopaController
 
 
     @GetMapping("dashboard/fechas")
-    @ApiOperation(value = "Dashboard de boletas por fecha", notes = "API para obtener las ganancias obtenidas en un rango de fecha (deben estar en formato: YYYY-MM-DD)")
+    @ApiOperation(value = "Dashboard de boletas por fecha", 
+        notes = "API para obtener las ganancias obtenidas en un rango de fecha (deben estar en formato: YYYY-MM-DD). Si alguna no esta presente, se listaran de todas las fechas registradas."
+        )
     public ResponseEntity<List<Map<String, Object>>> DashboardBoletaPorFecha
     (
-        @ApiParam(value = "La fecha inicial del rango", example = "2021-03-16")
-        @RequestParam("fechaInicial") String fechaInicial,
+        @ApiParam(value = "La fecha inicial del rango (YYYY-MM-DD)", example = "2021-03-16")
+        @RequestParam(required = false, name = "fechaInicial") String fechaInicial,
 
-        @ApiParam(value = "La fecha final del rango", example = "2021-06-20")
-        @RequestParam("fechaFinal") String fechaFinal)
+        @ApiParam(value = "La fecha final del rango (YYYY-MM-DD)", example = "2021-06-20")
+        @RequestParam(required = false, name = "fechaFinal") String fechaFinal)
     {
         
         List<Map<String, Object>> dashResult;
 
-        if(fechaFinal == null && fechaInicial == null)
+        if(fechaFinal == null || fechaInicial == null)
         {
             dashResult = boletaRepository.queryByDate();
 
