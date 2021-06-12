@@ -3,6 +3,7 @@ package com.usmpropa.usmpropaapi.Controllers;
 import com.usmpropa.usmpropaapi.Repository.BoletaRepository;
 import com.usmpropa.usmpropaapi.Repository.RopaRepository;
 import com.usmpropa.usmpropaapi.Results.DashResult;
+import com.usmpropa.usmpropaapi.Results.GenericDashResult;
 import com.usmpropa.usmpropaapi.Results.RopaResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,15 +104,20 @@ public class RopaController
     @GetMapping("dashboard/tipos")
     @ApiOperation(value = "Dashboard de boletas por tipo de ropa", 
     notes = "API para obtener las ganancias obtenidas por cada tipo de ropa")
-    public ResponseEntity<Map<String,Double>> DashboardBoletaPorTipo()
+    public ResponseEntity<List<GenericDashResult>> DashboardBoletaPorTipo()
     {
         List<Boleta> boletas = boletaRepository.findAll();
         Map<String,Double> dashResult = boletas.stream()
                     .collect(
                         Collectors.groupingBy(Boleta:: getNombreTipoRopa,Collectors.summingDouble(Boleta::getTotal))
                         );
-
-        return new ResponseEntity<Map<String,Double>>(dashResult,HttpStatus.OK);
+        
+        List<GenericDashResult> result = dashResult.entrySet()
+            .stream()
+            .map(e -> new GenericDashResult(e.getKey(), e.getValue()))
+            .collect(Collectors.toList());
+        
+        return new ResponseEntity<List<GenericDashResult>>(result,HttpStatus.OK);
     }
 
 

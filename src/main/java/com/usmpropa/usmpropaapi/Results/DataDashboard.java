@@ -21,6 +21,5 @@ public class DataDashboard
     public void setData(Double dash_total) {
         this.dash_total = dash_total;
     }
-
     
 }

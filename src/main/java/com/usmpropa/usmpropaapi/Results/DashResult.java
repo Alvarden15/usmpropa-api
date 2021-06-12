@@ -13,6 +13,11 @@ public class DashResult {
     public void setList(ArrayList<DataDashboard> list) {
         this.list = list;
     }
+
+    public DashResult() {
+    }
+
+    
 }
 
 
