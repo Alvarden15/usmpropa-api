@@ -2,6 +2,7 @@ package com.usmpropa.usmpropaapi.Controllers;
 
 import com.usmpropa.usmpropaapi.Repository.BoletaRepository;
 import com.usmpropa.usmpropaapi.Repository.RopaRepository;
+import com.usmpropa.usmpropaapi.Results.DashResult;
 import com.usmpropa.usmpropaapi.Results.RopaResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,9 @@ public class RopaController
     }
 
     @GetMapping("dashboard")
-    @ApiOperation(value = "Dashboard de prueba", notes = "API para demostrar como funciona el dashboard (ve stock por cada tipo de ropa)")
+    @ApiOperation(value = "Dashboard de prueba"
+    , notes = "API para demostrar como funciona el dashboard (ve stock por cada tipo de ropa)"
+    )
     public ResponseEntity<Map<TipoRopa,Integer>> Dashboard()
     {
         List<Ropa> ropas = ropaRepository.findAll();
@@ -98,7 +101,8 @@ public class RopaController
     }
 
     @GetMapping("dashboard/tipos")
-    @ApiOperation(value = "Dashboard de boletas por tipo de ropa", notes = "API para obtener las ganancias obtenidas por cada tipo de ropa")
+    @ApiOperation(value = "Dashboard de boletas por tipo de ropa", 
+    notes = "API para obtener las ganancias obtenidas por cada tipo de ropa")
     public ResponseEntity<Map<String,Double>> DashboardBoletaPorTipo()
     {
         List<Boleta> boletas = boletaRepository.findAll();
@@ -114,7 +118,7 @@ public class RopaController
     @GetMapping("dashboard/fechas")
     @ApiOperation(value = "Dashboard de boletas por fecha", 
         notes = "API para obtener las ganancias obtenidas en un rango de fecha (deben estar en formato: YYYY-MM-DD). Si alguna no esta presente, se listaran de todas las fechas registradas."
-        )
+        ,response = DashResult.class)
     public ResponseEntity<List<Map<String, Object>>> DashboardBoletaPorFecha
     (
         @ApiParam(value = "La fecha inicial del rango (YYYY-MM-DD)", example = "2021-03-16")
@@ -153,7 +157,9 @@ public class RopaController
     }
 
     @GetMapping("dashboard/direccion")
-    @ApiOperation(value = "Dashboard de boletas por local", notes = "API para obtener las ganancias de ropa obtenidas por cada local")
+    @ApiOperation(value = "Dashboard de boletas por local",
+     notes = "API para obtener las ganancias de ropa obtenidas por cada local",
+     response = DashResult.class)
     public ResponseEntity<List<Map<String, Object>>> direccion(){
         return  new ResponseEntity<List<Map<String, Object>>>(
             boletaRepository.queryByDireccion(), HttpStatus.OK);
