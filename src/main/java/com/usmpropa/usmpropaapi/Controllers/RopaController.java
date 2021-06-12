@@ -5,7 +5,6 @@ import com.usmpropa.usmpropaapi.Repository.RopaRepository;
 import com.usmpropa.usmpropaapi.Results.RopaResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,14 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Date;
-import java.time.format.DateTimeFormatter;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.websocket.server.PathParam;
 
 import com.usmpropa.usmpropaapi.Models.*;
 
@@ -83,6 +84,7 @@ public class RopaController
     }
 
     @GetMapping("dashboard")
+    @ApiOperation(value = "Dashboard de prueba", notes = "API para demostrar como funciona el dashboard (ve stock por cada tipo de ropa)")
     public ResponseEntity<Map<TipoRopa,Integer>> Dashboard()
     {
         List<Ropa> ropas = ropaRepository.findAll();
@@ -96,6 +98,7 @@ public class RopaController
     }
 
     @GetMapping("dashboard/tipos")
+    @ApiOperation(value = "Dashboard de boletas por tipo de ropa", notes = "API para obtener las ganancias obtenidas por cada tipo de ropa")
     public ResponseEntity<Map<String,Double>> DashboardBoletaPorTipo()
     {
         List<Boleta> boletas = boletaRepository.findAll();
@@ -107,32 +110,48 @@ public class RopaController
         return new ResponseEntity<Map<String,Double>>(dashResult,HttpStatus.OK);
     }
 
-    //necesita aun algunos cambios y que se ordene por fechas
+
     @GetMapping("dashboard/fechas")
-    public ResponseEntity<Map<String,Double>> DashboardBoletaPorFecha
-            (@RequestParam("fechaInicial") @DateTimeFormat(pattern =  "YYYY-dd-MM") Date fechaInicial,
-             @RequestParam("fechaFinal") @DateTimeFormat(pattern =  "YYYY-dd-MM") Date fechaFinal)
+    @ApiOperation(value = "Dashboard de boletas por fecha", notes = "API para obtener las ganancias obtenidas en un rango de fecha (deben estar en formato: YYYY-MM-DD)")
+    public ResponseEntity<List<Map<String, Object>>> DashboardBoletaPorFecha
+    (
+        @ApiParam(value = "La fecha inicial del rango", example = "2021-03-16")
+        @RequestParam("fechaInicial") String fechaInicial,
+
+        @ApiParam(value = "La fecha final del rango", example = "2021-06-20")
+        @RequestParam("fechaFinal") String fechaFinal)
     {
-        if(fechaFinal == null || fechaInicial == null)
-        {
-            return new ResponseEntity<Map<String,Double>>(HttpStatus.BAD_REQUEST);
-        }
         
-        if(fechaInicial.after(fechaFinal))
+        List<Map<String, Object>> dashResult;
+
+        if(fechaFinal == null && fechaInicial == null)
         {
-            return new ResponseEntity<Map<String,Double>>(HttpStatus.BAD_REQUEST);
-        }
+            dashResult = boletaRepository.queryByDate();
 
-        List<Boleta> boletas = boletaRepository.findAll();
-        Map<String,Double> dashResult = boletas.stream()
-                    .collect(
-                        Collectors.groupingBy(Boleta:: getNombreTipoRopa,Collectors.summingDouble(Boleta::getTotal))
-                        );
+        }else{
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            
+            try {
+                Date inicio = formatter.parse(fechaInicial);
+                Date fin = formatter.parse(fechaFinal);
+                
+                if(inicio.after(fin))
+                {
+                    return new ResponseEntity<List<Map<String, Object>>>(HttpStatus.BAD_REQUEST);
+                }
+                dashResult = boletaRepository.queryByDate(inicio, fin);
 
-        return new ResponseEntity<Map<String,Double>>(dashResult,HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<List<Map<String, Object>>>(HttpStatus.BAD_REQUEST);
+            }
+            
+        } 
+
+        return new ResponseEntity<List<Map<String, Object>>>(dashResult,HttpStatus.OK);
     }
 
     @GetMapping("dashboard/direccion")
+    @ApiOperation(value = "Dashboard de boletas por local", notes = "API para obtener las ganancias de ropa obtenidas por cada local")
     public ResponseEntity<List<Map<String, Object>>> direccion(){
         return  new ResponseEntity<List<Map<String, Object>>>(
             boletaRepository.queryByDireccion(), HttpStatus.OK);
