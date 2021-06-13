@@ -32,6 +32,7 @@ import com.usmpropa.usmpropaapi.Models.*;
 @RequestMapping("api/ropa")
 public class RopaController
 {
+   
     @Autowired
     private RopaRepository ropaRepository;
 
@@ -171,4 +172,5 @@ public class RopaController
             boletaRepository.queryByDireccion(), HttpStatus.OK);
     }
 
+    
 }
