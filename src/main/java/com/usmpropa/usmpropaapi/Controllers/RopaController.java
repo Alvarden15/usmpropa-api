@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 import com.usmpropa.usmpropaapi.Models.*;
 
 @RestController
-@RequestMapping("api/ropa")
+@RequestMapping(value = "api/ropa", produces = "application/json")
 public class RopaController
 {
    
@@ -86,7 +86,7 @@ public class RopaController
         
     }
 
-    @GetMapping("dashboard")
+    @GetMapping(value = "dashboard", produces = "application/json")
     @ApiOperation(value = "Dashboard de prueba"
     , notes = "API para demostrar como funciona el dashboard (ve stock por cada tipo de ropa)"
     )
@@ -102,7 +102,7 @@ public class RopaController
         return new ResponseEntity<Map<TipoRopa,Integer>>(dashResult,HttpStatus.OK);
     }
 
-    @GetMapping("dashboard/tipos")
+    @GetMapping(value = "dashboard/tipos", produces = "application/json")
     @ApiOperation(value = "Dashboard de boletas por tipo de ropa", 
     notes = "API para obtener las ganancias obtenidas por cada tipo de ropa")
     public ResponseEntity<List<GenericDashResult>> DashboardBoletaPorTipo()
@@ -122,7 +122,7 @@ public class RopaController
     }
 
 
-    @GetMapping("dashboard/fechas")
+    @GetMapping(value = "dashboard/fechas", produces = "application/json")
     @ApiOperation(value = "Dashboard de boletas por fecha", 
         notes = "API para obtener las ganancias obtenidas en un rango de fecha (deben estar en formato: YYYY-MM-DD). Si alguna no esta presente, se listaran de todas las fechas registradas."
         ,response = DashResult.class)
@@ -163,7 +163,7 @@ public class RopaController
         return new ResponseEntity<List<Map<String, Object>>>(dashResult,HttpStatus.OK);
     }
 
-    @GetMapping("dashboard/direccion")
+    @GetMapping(value = "dashboard/direccion", produces = "application/json")
     @ApiOperation(value = "Dashboard de boletas por local",
      notes = "API para obtener las ganancias de ropa obtenidas por cada local",
      response = DashResult.class)
